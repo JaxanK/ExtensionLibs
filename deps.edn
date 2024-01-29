@@ -1,0 +1,18 @@
+{:paths ["src" "resources"]
+ :deps {org.clojure/clojure {:mvn/version "1.11.1"}
+        net.mikera/core.matrix {:mvn/version "0.63.0"}
+        org.clojure/math.numeric-tower {:mvn/version "0.0.5"}
+        net.mikera/vectorz-clj {:mvn/version "0.48.0"}
+
+        gnl/ghostwheel {:mvn/version "0.3.9"}
+        }
+ :aliases
+ {:test
+  {:extra-paths ["test"]
+   :extra-deps {org.clojure/test.check {:mvn/version "1.1.1"}
+                io.github.cognitect-labs/test-runner
+                {:git/tag "v0.5.1" :git/sha "dfb30dd"}}}
+  :build {:deps {io.github.clojure/tools.build
+                 {:mvn/version "0.9.6"}
+                 slipset/deps-deploy {:mvn/version "0.2.0"}}
+          :ns-default build}}}

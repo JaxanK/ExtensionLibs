@@ -1,0 +1,8 @@
+
+{:linters {:unused-binding {:level :off}
+           :clojure-lsp/unused-public-var {:level :off}}
+ :lint-as {thrawn.JaxExtension/deflet clojure.core/let
+           thrawn.JaxExtension/maplet clojure.core/let
+           ghostwheel.core/>defn clojure.core/defn
+           ghostwheel.core/>fdef clojure.core/defn
+           ghostwheel.core/>defn- clojure.core/defn-}}
