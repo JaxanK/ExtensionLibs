@@ -1,6 +1,9 @@
 
-{:linters {:unused-binding {:level :off}
-           :clojure-lsp/unused-public-var {:level :off}}
+{:config-in-call {clojure.core.matrix/abs {:ignore [:unresolved-symbol]} ;abs exists in the namespace when loaded, but not in code so linter detects it
+                  } 
+ :linters {:unused-binding {:level :off}
+           :clojure-lsp/unused-public-var {:level :off}
+           :unused-referred-var {:level :off}}
  :lint-as {thrawn.JaxExtension/deflet clojure.core/let
            thrawn.JaxExtension/maplet clojure.core/let
            ghostwheel.core/>defn clojure.core/defn

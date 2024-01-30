@@ -64,7 +64,6 @@
      :CAZ_BY (mx/normalise (mx/abs (mx/cross NAZ NBY)))
      :CAZ_BZ (mx/normalise (mx/abs (mx/cross NAZ NBZ)))}))
 
-
 (defn separated [cordA cordB axis]
   (let
    [projA (into [] (map #(mx/dot % axis) (vals cordA)))

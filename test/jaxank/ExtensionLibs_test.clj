@@ -1,4 +1,5 @@
 (ns jaxank.ExtensionLibs-test
+  #_{:clj-kondo/ignore [:refer-all]}
   (:require [clojure.test :refer :all]
             [jaxank.ExtensionLibs :refer :all]))
 

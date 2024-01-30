@@ -10,7 +10,7 @@
             [clojure.core.matrix.operators :as mxop :refer [* - + == / min max]] ;overrides *, + etc. for matrices
             [clojure.math.numeric-tower :as math]
 
-            [jaxank.JaxExtension :refer :all]
+            [jaxank.JaxExtension :as je]
             [jaxank.StandardSpecs :as StdSpecs]
 
             ))
@@ -34,7 +34,7 @@
                                    ::TransformRow
                                    ::TransformRowLast))
 (s/def ::POSE ::AffineTransform)
-(s/def ::decent-number (s/and number? #(nor (NaN? %) (infinite? %))))
+(s/def ::decent-number (s/and number? #(je/nor (NaN? %) (infinite? %))))
 ;;An Affine Transform represents the full POS data of an object in 3D space.
 ;; A transform is not the cleanest way for a user or even us programmers to think about the data
 ;;  therefore we need this library to convert between more convienient forms to the core easy operable affine transform structure
@@ -50,7 +50,7 @@
 (s/def ::Rot (s/and radspec))
 (s/def ::UnitSphere (s/and #_{:clj-kondo/ignore [:syntax]}
                      (s/keys :req [::AVX ::AVY ::AVZ ::Rot] :gen UnitSphereGeneratorfn)
-                           #(isValueEqual? 0.00001 1.0 (math/sqrt (+ (math/expt (::AVX %) 2) (math/expt (::AVY %) 2) (math/expt (::AVZ %) 2))))))
+                           #(je/isValueEqual? 0.00001 1.0 (math/sqrt (+ (math/expt (::AVX %) 2) (math/expt (::AVY %) 2) (math/expt (::AVZ %) 2))))))
 (s/def ::Mirrored boolean?)
 (s/def ::POSE-point-unitSphereCart-mirrored (s/keys :req [::Position ::UnitSphere ::Mirrored]))
 
