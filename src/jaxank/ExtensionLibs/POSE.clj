@@ -87,21 +87,21 @@
 
 #_{:clj-kondo/ignore [:unresolved-symbol]}
 (>defn POSE->PAAM [pose] [::AffineTransform => ::POSE-point-unitSphereCart-mirrored] ;singularity @ 0 and coremath/PI. Requires Pure Rotation Matrix (det = +1 & R' * R =1)
-       (let [NormPose (select pose [0 1 2] :butlast)
+       (let [NormPose (mx/select pose [0 1 2] :butlast)
              ClosetoZero 0.0001
-             XX (/ (+ (abs (select NormPose 0 0)) 1) 2)
-             YY (/ (+ (abs (select NormPose 1 1)) 1) 2)
-             ZZ (/ (+ (abs (select NormPose 2 2)) 1) 2)
-             XY (/ (+ (select NormPose 0 1) (select NormPose 1 0)) 4)
-             XZ (/ (+ (select NormPose 0 2) (select NormPose 2 0)) 4)
-             YZ (/ (+ (select NormPose 2 1) (select NormPose 1 2)) 4)
+             XX (/ (+ (abs (mx/select NormPose 0 0)) 1) 2)
+             YY (/ (+ (abs (mx/select NormPose 1 1)) 1) 2)
+             ZZ (/ (+ (abs (mx/select NormPose 2 2)) 1) 2)
+             XY (/ (+ (mx/select NormPose 0 1) (mx/select NormPose 1 0)) 4)
+             XZ (/ (+ (mx/select NormPose 0 2) (mx/select NormPose 2 0)) 4)
+             YZ (/ (+ (mx/select NormPose 2 1) (mx/select NormPose 1 2)) 4)
 
-             Singularity    (cond (and (< (abs (- (select NormPose 1 0) (select NormPose 0 1))) ClosetoZero)
-                                       (< (abs (- (select NormPose 2 0) (select NormPose 0 2))) ClosetoZero)
-                                       (< (abs (- (select NormPose 1 2) (select NormPose 2 1))) ClosetoZero))  1
+             Singularity    (cond (and (< (abs (- (mx/select NormPose 1 0) (mx/select NormPose 0 1))) ClosetoZero)
+                                       (< (abs (- (mx/select NormPose 2 0) (mx/select NormPose 0 2))) ClosetoZero)
+                                       (< (abs (- (mx/select NormPose 1 2) (mx/select NormPose 2 1))) ClosetoZero))  1
                                   :else  -1)
 
-             AxisAngle (coremath/acos (/ (- (+ (select NormPose 0 0) (select NormPose 1 1) (select NormPose 2 2)) 1) 2)) ;AxisAngle (coremath/acos (/ (- (+ (abs (select NormPose 0 0)) (abs (select NormPose 1 1)) (abs (select NormPose 2 2))) 1) 2))
+             AxisAngle (coremath/acos (/ (- (+ (mx/select NormPose 0 0) (mx/select NormPose 1 1) (mx/select NormPose 2 2)) 1) 2)) ;AxisAngle (coremath/acos (/ (- (+ (abs (mx/select NormPose 0 0)) (abs (mx/select NormPose 1 1)) (abs (mx/select NormPose 2 2))) 1) 2))
              
              AxisX (cond
                      (= Singularity 1)                              (cond
@@ -116,7 +116,7 @@
                                                                       :else 0)
 
                      (> ClosetoZero (* 2 (coremath/sin AxisAngle))) 1 ;(= 0 (* 2 (coremath/sin AxisAngle)))
-                     (not= 0 (* 2 (coremath/sin AxisAngle)))        (/ (- (select NormPose 2 1) (select NormPose 1 2)) (* 2 (coremath/sin AxisAngle))))
+                     (not= 0 (* 2 (coremath/sin AxisAngle)))        (/ (- (mx/select NormPose 2 1) (mx/select NormPose 1 2)) (* 2 (coremath/sin AxisAngle))))
 
              AxisY (cond
                      (= Singularity 1)                              (cond
@@ -131,7 +131,7 @@
                                                                       :else 0)
 
                      (> ClosetoZero (* 2 (coremath/sin AxisAngle))) 1 ;(= 0 (* 2 (coremath/sin AxisAngle)))
-                     (not= 0 (* 2 (coremath/sin AxisAngle)))        (/ (- (select NormPose 0 2) (select NormPose 2 0)) (* 2 (coremath/sin AxisAngle))))
+                     (not= 0 (* 2 (coremath/sin AxisAngle)))        (/ (- (mx/select NormPose 0 2) (mx/select NormPose 2 0)) (* 2 (coremath/sin AxisAngle))))
 
              AxisZ (cond
                      (= Singularity 1)                              (cond
@@ -146,11 +146,11 @@
                                                                       :else 0)
 
                      (> ClosetoZero (* 2 (coremath/sin AxisAngle))) 1 ;(= 0 (* 2 (coremath/sin AxisAngle)))
-                     (not= 0 (* 2 (coremath/sin AxisAngle)))        (/ (- (select NormPose 1 0) (select NormPose 0 1)) (* 2 (coremath/sin AxisAngle))))
+                     (not= 0 (* 2 (coremath/sin AxisAngle)))        (/ (- (mx/select NormPose 1 0) (mx/select NormPose 0 1)) (* 2 (coremath/sin AxisAngle))))
 
              Ismirror (neg? (det NormPose))]
 
-         #:thrawn.Libraries.POSE{:Position [(select pose 0 3) (select pose 1 3) (select pose 2 3)]
+         #:thrawn.Libraries.POSE{:Position [(mx/select pose 0 3) (mx/select pose 1 3) (mx/select pose 2 3)]
                                   :UnitSphere
                                   #:thrawn.Libraries.POSE{:AVX AxisX,
                                                           :AVY AxisY,
