@@ -3,7 +3,7 @@
             [clojure.string :as str]
             [clojure.core.matrix :as mx]
             [jaxank.ExtensionLibs.JaxExtension :as je]
-            [jaxank.ExtensionLibs.Specs :as ls]
+            [jaxank.ExtensionLibs.StandardSpecs :as ls]
             ))
 
 
