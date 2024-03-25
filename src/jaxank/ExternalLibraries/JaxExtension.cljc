@@ -1,8 +1,10 @@
-(ns jaxank.JaxExtension "Jaxan's Language Extension for Fundamental Functions that are basically language level addons. Okay to use :refer :all"
+(ns jaxank.ExternalLibraries.JaxExtension "Jaxan's Language Extension for Fundamental Functions that are basically language level addons. Okay to use :refer :all"
     (:require [clojure.math :as math]
               [clojure.string :as str]
               #?@(:clj  [[clojure.spec.alpha :as s]]
-                  :cljs [[cljs.spec.alpha :as s]])))
+                  :cljs [[cljs.spec.alpha :as s]
+                         ;[cljs.edn :refer [read-string]]
+                         ])))
 
 
 ;With help from https://stackoverflow.com/questions/27822101/working-with-long-let-expressions-in-clojure-repl
@@ -13,19 +15,20 @@
                                         `(def ~(nth s i) (nth ~expr ~i)))) ; need to fix so that an expression gets evaled into a vector if so... so type check for function?
                       `(def ~s ~expr)))))
 
-#?(:clj
+#?(:clj (do
    (defmacro maplet "Unique names in bindings will be used to construct a map and return it. Remaining expressions will be evaluated as well if supplied" [bindings & expressions]
      (let [uniqueVarNames (into #{} (filter symbol? (take-nth 2 bindings)))
            returnMap (str "{" (reduce #(str %1 " " %2) (for [x uniqueVarNames] (str ":" (name x) " " (name x)))) "}")]
 
-       `(let ~bindings ~(apply list `do expressions) ~(read-string returnMap)))))
-
-;; (maplet [x 4
-;;          y 7
-;;          z 7
-;;          [z w] [1 2]
-
-;;          x 18] (def hello w))
+       `(let ~bindings ~(apply list `do expressions) ~(read-string returnMap))))
+    ;;  (maplet [x 4
+    ;;         y 7
+    ;;         z 7
+    ;;         [z w] [1 2]
+   
+    ;;         x 18] (def hello w))
+     
+   ))
 
  ;|========= Misc functions =======|
 #?(:clj (defn generateUniqueID [] (str (java.util.UUID/randomUUID))))
@@ -162,3 +165,23 @@
                                         (symbol rv))
                                  :cljs (throw (js/Error. "Sorry, symbols not supported for this macro in clojurescript")) ;Note: This cljs error throw untested
                                  )))
+
+#?(:clj (defn ns-dsc-fn "Namespace dot and slash corrector macro. Useful to refer to a deeper namespace from a root alias. \n
+                   Keyword Input Example:    ::bb/ns1.ns2.ns3   will convert to   :*bb_path*.ns1.ns2/ns3 \n
+                    Symbol Input Example:      bb/ns1.ns2.ns3   will convert to    *bb_path*.ns1.ns2/ns3
+                 Can also pass in a string and (ns-dsc-fn (read-string str)) will be called
+                 "
+          [nscorrect]
+
+          (cond  (string? nscorrect) (ns-dsc-fn (read-string nscorrect))
+            (keyword? nscorrect) (let [x (str (namespace nscorrect) "." (str/replace (name nscorrect) "/" "."))
+                                       lio (str/last-index-of x ".")
+                                       rv (str (subs x 0 lio) "/" (subs x (+ 1 lio)))]
+                                   (keyword rv))
+            (symbol? nscorrect)  #?(:clj (let [nscorrect2 (read-string (str "::" nscorrect))
+                                               x (str (namespace nscorrect2) "." (str/replace (name nscorrect2) "/" "."))
+                                               lio (str/last-index-of x ".")
+                                               rv (str (subs x 0 lio) "/" (subs x (+ 1 lio)))]
+                                           (symbol rv))
+                                    :cljs (throw (js/Error. "Sorry, symbols not supported for this macro in clojurescript")) ;Note: This cljs error throw untested
+                                    ))))

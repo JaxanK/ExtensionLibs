@@ -1,4 +1,4 @@
-(ns jaxank.BoxIntersection
+(ns jaxank.ExternalLibraries.BoxIntersection
   #_{:clj-kondo/ignore [:unused-namespace]}
   (:require
    [clojure.spec.alpha :as s]
@@ -9,9 +9,9 @@
    [clojure.core.matrix.operators :as mxop]
    [clojure.math.numeric-tower :as math]
 
-   ;[jaxank.JaxExtension :as je]
-   [jaxank.StandardSpecs :as StdSpecs]
-   [jaxank.POSE :as PL]))
+   ;[jaxank.ExternalLibraries.JaxExtension :as je]
+   [jaxank.ExternalLibraries.StandardSpecs :as StdSpecs]
+   [jaxank.ExternalLibraries.POSE :as PL]))
 
 (defn Coordinates [pose [SBL SBW SBH]]
   (let [Cord {:O   [0     0     0]
@@ -31,7 +31,7 @@
         NewCord (zipmap [:O :X :Y :Z :XY :XZ :YZ :XYZ] TranslateCord)]
     NewCord))
 
-(defn Coordinates->POSE [Cord] ;Doesnt work for rotated objects!!!
+(defn Coordinates->POSE [Cord] ;Doesn't work for rotated objects!!!
   (let [X (first (:O Cord))
         Y (second (:O Cord))
         Z (last (:O Cord))

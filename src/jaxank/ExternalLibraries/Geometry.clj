@@ -1,9 +1,9 @@
-(ns jaxank.Geometry
+(ns jaxank.ExternalLibraries.Geometry
   (:require [clojure.math :as m]
             [clojure.string :as str]
             [clojure.core.matrix :as mx]
-            [jaxank.JaxExtension :as je]
-            [jaxank.Specs :as ls]
+            [jaxank.ExternalLibraries.JaxExtension :as je]
+            [jaxank.ExternalLibraries.Specs :as ls]
             ))
 
 

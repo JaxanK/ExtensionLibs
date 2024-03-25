@@ -1,4 +1,4 @@
-{:paths ["src" "resources"]
+{:paths ["src"]
  :deps {org.clojure/clojure {:mvn/version "1.11.1"}
         net.mikera/core.matrix {:mvn/version "0.63.0"}
         org.clojure/math.numeric-tower {:mvn/version "0.0.5"}
