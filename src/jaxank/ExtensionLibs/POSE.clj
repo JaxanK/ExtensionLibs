@@ -86,26 +86,26 @@
           [0 0 0 1]]))
 
 #_{:clj-kondo/ignore [:unresolved-symbol]}
-(>defn POSE->PAAM [pose] [::AffineTransform => ::POSE-point-unitSphereCart-mirrored] ;singularity @ 0 and coremath/PI. Requires Pure Rotation Matrix (det = +1 & R' * R =1)
+(>defn POSE->PAAM [pose] [::AffineTransform => ::POSE-point-unitSphereCart-mirrored] ;singularity @ 0 and coremath/PI. Requires Pure Rotation Matrix (mx/det = +1 & R' * R =1)
        (let [NormPose (mx/select pose [0 1 2] :butlast)
              ClosetoZero 0.0001
-             XX (/ (+ (abs (mx/select NormPose 0 0)) 1) 2)
-             YY (/ (+ (abs (mx/select NormPose 1 1)) 1) 2)
-             ZZ (/ (+ (abs (mx/select NormPose 2 2)) 1) 2)
+             XX (/ (+ (mx/abs (mx/select NormPose 0 0)) 1) 2)
+             YY (/ (+ (mx/abs (mx/select NormPose 1 1)) 1) 2)
+             ZZ (/ (+ (mx/abs (mx/select NormPose 2 2)) 1) 2)
              XY (/ (+ (mx/select NormPose 0 1) (mx/select NormPose 1 0)) 4)
              XZ (/ (+ (mx/select NormPose 0 2) (mx/select NormPose 2 0)) 4)
              YZ (/ (+ (mx/select NormPose 2 1) (mx/select NormPose 1 2)) 4)
 
-             Singularity    (cond (and (< (abs (- (mx/select NormPose 1 0) (mx/select NormPose 0 1))) ClosetoZero)
-                                       (< (abs (- (mx/select NormPose 2 0) (mx/select NormPose 0 2))) ClosetoZero)
-                                       (< (abs (- (mx/select NormPose 1 2) (mx/select NormPose 2 1))) ClosetoZero))  1
+             Singularity    (cond (and (< (mx/abs (- (mx/select NormPose 1 0) (mx/select NormPose 0 1))) ClosetoZero)
+                                       (< (mx/abs (- (mx/select NormPose 2 0) (mx/select NormPose 0 2))) ClosetoZero)
+                                       (< (mx/abs (- (mx/select NormPose 1 2) (mx/select NormPose 2 1))) ClosetoZero))  1
                                   :else  -1)
 
-             AxisAngle (coremath/acos (/ (- (+ (mx/select NormPose 0 0) (mx/select NormPose 1 1) (mx/select NormPose 2 2)) 1) 2)) ;AxisAngle (coremath/acos (/ (- (+ (abs (mx/select NormPose 0 0)) (abs (mx/select NormPose 1 1)) (abs (mx/select NormPose 2 2))) 1) 2))
+             AxisAngle (coremath/acos (/ (- (+ (mx/select NormPose 0 0) (mx/select NormPose 1 1) (mx/select NormPose 2 2)) 1) 2)) ;AxisAngle (coremath/acos (/ (- (+ (mx/abs (mx/select NormPose 0 0)) (mx/abs (mx/select NormPose 1 1)) (mx/abs (mx/select NormPose 2 2))) 1) 2))
              
              AxisX (cond
                      (= Singularity 1)                              (cond
-                                                                      (identity-matrix? NormPose)                     1
+                                                                      (mx/identity-matrix? NormPose)                     1
                                                                       (and (< XX ClosetoZero)  (> XX (max YY ZZ)))    0
                                                                       (and (>= XX ClosetoZero) (> XX (max YY ZZ)))    (coremath/sqrt XX)
                                                                       (and (< YY ClosetoZero)  (> YY (max XX ZZ)))    0.7071
@@ -120,7 +120,7 @@
 
              AxisY (cond
                      (= Singularity 1)                              (cond
-                                                                      (identity-matrix? NormPose)                     0
+                                                                      (mx/identity-matrix? NormPose)                     0
                                                                       (and (< XX ClosetoZero)  (> XX (max YY ZZ)))    0.7071
                                                                       (and (>= XX ClosetoZero) (> XX (max YY ZZ)))    (/ XY (coremath/sqrt XX))
                                                                       (and (< YY ClosetoZero)  (> YY (max XX ZZ)))    0
@@ -135,7 +135,7 @@
 
              AxisZ (cond
                      (= Singularity 1)                              (cond
-                                                                      (identity-matrix? NormPose)                     0
+                                                                      (mx/identity-matrix? NormPose)                     0
                                                                       (and (< XX ClosetoZero)  (> XX (max YY ZZ)))    0.7071
                                                                       (and (>= XX ClosetoZero) (> XX (max YY ZZ)))    (/ XZ (coremath/sqrt XX))
                                                                       (and (< YY ClosetoZero)  (> YY (max XX ZZ)))    0.7071
@@ -148,7 +148,7 @@
                      (> ClosetoZero (* 2 (coremath/sin AxisAngle))) 1 ;(= 0 (* 2 (coremath/sin AxisAngle)))
                      (not= 0 (* 2 (coremath/sin AxisAngle)))        (/ (- (mx/select NormPose 1 0) (mx/select NormPose 0 1)) (* 2 (coremath/sin AxisAngle))))
 
-             Ismirror (neg? (det NormPose))]
+             Ismirror (neg? (mx/det NormPose))]
 
          #:thrawn.Libraries.POSE{:Position [(mx/select pose 0 3) (mx/select pose 1 3) (mx/select pose 2 3)]
                                   :UnitSphere
@@ -200,7 +200,7 @@
 ;; |------ Matrix Operations ------|
 #_{:clj-kondo/ignore [:unresolved-symbol]}
 (>defn POSE-Invert [pose] [::AffineTransform => ::AffineTransform]  ;Checks if square matrix, change name?
-       (identity-matrix? (round (mmul pose (inverse pose)))))
+       (mx/identity-matrix? (mx/round (mx/mmul pose (mx/inverse pose)))))
 
 ;;----- Test.check Generators -----
 (defn- UnitSphereGenerator [[theta phi]]
@@ -227,14 +227,14 @@
 
 
 
-;;   (def thistest (round (* [1 1 1 1] (transpose [[1.0 0.0 0.0 0.0]
+;;   (def thistest (mx/round (* [1 1 1 1] (transpose [[1.0 0.0 0.0 0.0]
 ;;                                                 [0.0 1.0 0.0 0.0]
 ;;                                                 [0.0 0.0 1.0 0.0]
 ;;                                                 [1.1070307160264413E-17 -0.11482226517256822 -9.817036914660073E-18 1.0]]))))
 ;;   (def basic [[1 0 0 20] [0.0 1 0 1] [0 0 1 1] [0.0 0.0 0.0 1.0]])
 ;;   (def basevec [(/ coremath/PI 2) 0 0])
 
-;;   (round (POSE-Rotate basic basevec))
-;;   (det thistest)
+;;   (mx/round (POSE-Rotate basic basevec))
+;;   (mx/det thistest)
 
 ;;   )
