@@ -1,4 +1,4 @@
-(ns jaxank.ExternalLibraries.JaxExtension "Jaxan's Language Extension for Fundamental Functions that are basically language level addons. Okay to use :refer :all"
+(ns jaxank.ExtensionLibs.JaxExtension "Jaxan's Language Extension for Fundamental Functions that are basically language level addons. Okay to use :refer :all"
     (:require [clojure.math :as math]
               [clojure.string :as str]
               #?@(:clj  [[clojure.spec.alpha :as s]]

@@ -1,4 +1,4 @@
-(ns jaxank.ExternalLibraries.POSE
+(ns jaxank.ExtensionLibs.POSE
   "A Library for managing Position Orientation & Scale within an easily Extendable clojure map structure"
   (:refer-clojure :exclude [* - + == / min max abs])
   (:require [clojure.spec.alpha :as s]
@@ -10,8 +10,8 @@
             [clojure.core.matrix.operators :as mxop :refer [* - + == / min max]] ;overrides *, + etc. for matrices
             [clojure.math.numeric-tower :as math]
 
-            [jaxank.ExternalLibraries.JaxExtension :as je]
-            [jaxank.ExternalLibraries.StandardSpecs :as StdSpecs]
+            [jaxank.ExtensionLibs.JaxExtension :as je]
+            [jaxank.ExtensionLibs.StandardSpecs :as StdSpecs]
 
             ))
 

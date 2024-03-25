@@ -1,7 +1,7 @@
-(ns jaxank.ExternalLibraries.StandardSpecs
+(ns jaxank.ExtensionLibs.StandardSpecs
   (:require [clojure.math :as math]
             [clojure.spec.alpha :as s]
-            [jaxank.ExternalLibraries.JaxExtension :refer :all]
+            [jaxank.ExtensionLibs.JaxExtension :refer :all]
             ))
 
 

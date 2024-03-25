@@ -1,4 +1,4 @@
-(ns jaxank.ExternalLibraries.BoxIntersection
+(ns jaxank.ExtensionLibs.BoxIntersection
   #_{:clj-kondo/ignore [:unused-namespace]}
   (:require
    [clojure.spec.alpha :as s]
@@ -9,9 +9,9 @@
    [clojure.core.matrix.operators :as mxop]
    [clojure.math.numeric-tower :as math]
 
-   ;[jaxank.ExternalLibraries.JaxExtension :as je]
-   [jaxank.ExternalLibraries.StandardSpecs :as StdSpecs]
-   [jaxank.ExternalLibraries.POSE :as PL]))
+   ;[jaxank.ExtensionLibs.JaxExtension :as je]
+   [jaxank.ExtensionLibs.StandardSpecs :as StdSpecs]
+   [jaxank.ExtensionLibs.POSE :as PL]))
 
 (defn Coordinates [pose [SBL SBW SBH]]
   (let [Cord {:O   [0     0     0]
