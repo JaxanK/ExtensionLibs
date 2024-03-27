@@ -49,9 +49,9 @@
 
 
 (defn DisplaySystemTrayMessage "Display system tray notification. Not supported on all platforms (by Java classes). \ntype can be #{:none :info :warning :error}" [heading message type]
-  (let [heading (je/ifnil (string? heading) "")
-        message (je/ifnil (string? message) "")
-        type    (je/ifnil (keyword? type) :none)]
+  (let [heading (if (string? heading) heading  "")
+        message (if (string? message) message  "")
+        type    (if (keyword?   type)    type  :none)]
 
     (tray/display-message @Icon heading message type)))
 
