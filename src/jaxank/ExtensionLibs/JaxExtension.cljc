@@ -185,3 +185,16 @@
                                            (symbol rv))
                                     :cljs (throw (js/Error. "Sorry, symbols not supported for this macro in clojurescript")) ;Note: This cljs error throw untested
                                     ))))
+
+;Misc Utils
+#?(:clj (defn OpenInDefaultBrowser "Opens a URL in the default browser. Only tested on windows but will likely work for cross platform. Tries a second method (windows specific) if first fails." [url]
+          (if (string? url)
+            (try
+
+              (if (not (java.awt.Desktop/isDesktopSupported)) (throw (Exception. "Desktop not supported error")))
+              (.browse (java.awt.Desktop/getDesktop) (new java.net.URI url))
+
+              (catch Exception e
+                (.exec (Runtime/getRuntime) (str "rundll32 url.dll,FileProtocolHandler " url))))
+            (throw (Exception. "URL needs to be a string!"))
+            )))
