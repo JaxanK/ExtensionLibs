@@ -1,6 +1,7 @@
 (ns jaxank.ExtensionLibs.JaxExtension "Jaxan's Language Extension for Fundamental Functions that are basically language level addons. Okay to use :refer :all"
     (:require [clojure.math :as math]
               [clojure.string :as str]
+              [flatland.ordered.map :refer [ordered-map]]
               #?@(:clj  [[clojure.spec.alpha :as s]]
                   :cljs [[cljs.spec.alpha :as s]
                          ;[cljs.edn :refer [read-string]]
@@ -36,6 +37,11 @@
 (defn Collection->GUIDMap "Will take a list, set, or vector and turn it into a map with unique GUIDs used as the key for each entry" [col]
   (if (coll? col)
     (into {}
+          (for [entry col]
+            [(keyword (generateUniqueID)) entry]))))
+(defn Collection->GUIDOrderedMap "Will take a list, set, or vector and turn it into a map with unique GUIDs used as the key for each entry" [col]
+  (if (coll? col)
+    (into ordered-map
           (for [entry col]
             [(keyword (generateUniqueID)) entry]))))
 

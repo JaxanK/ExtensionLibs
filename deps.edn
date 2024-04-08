@@ -3,6 +3,7 @@
         net.mikera/core.matrix {:mvn/version "0.63.0"}
         org.clojure/math.numeric-tower {:mvn/version "0.0.5"}
         net.mikera/vectorz-clj {:mvn/version "0.48.0"}
+        org.flatland/ordered {:mvn/version "1.15.11"}
 
         gnl/ghostwheel {:mvn/version "0.3.9"}
         }
