@@ -41,7 +41,7 @@
             [(keyword (generateUniqueID)) entry]))))
 (defn Collection->GUIDOrderedMap "Will take a list, set, or vector and turn it into a map with unique GUIDs used as the key for each entry" [col]
   (if (coll? col)
-    (into ordered-map
+    (into (ordered-map)
           (for [entry col]
             [(keyword (generateUniqueID)) entry]))))
 
