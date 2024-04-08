@@ -33,6 +33,12 @@
  ;|========= Misc functions =======|
 #?(:clj (defn generateUniqueID [] (str (java.util.UUID/randomUUID))))
 
+(defn Collection->GUIDMap "Will take a list, set, or vector and turn it into a map with unique GUIDs used as the key for each entry" [col]
+  (if (coll? col)
+    (into {}
+          (for [entry col]
+            [(keyword (generateUniqueID)) entry]))))
+
 
 (defn unzipmap "Complement to core.zipmap. Order of keys will be order of list or vector returned. Will return a vector or a list depending on type of 1st arg." [keysInOrder map]
   (let [col (for [key keysInOrder] (key map))]
@@ -185,6 +191,14 @@
                                            (symbol rv))
                                     :cljs (throw (js/Error. "Sorry, symbols not supported for this macro in clojurescript")) ;Note: This cljs error throw untested
                                     ))))
+
+
+(defn remove-namespace-keys "Removes Namespaced Keys from a map" [m]
+  (into {} (for [[k v] m]
+             (if (keyword? k)
+               (let [new-key (last (clojure.string/split (name k) #"/"))]
+                 [(keyword new-key) v])
+               [k v]))))
 
 ;Misc Utils
 #?(:clj (defn OpenInDefaultBrowser "Opens a URL in the default browser. Only tested on windows but will likely work for cross platform. Tries a second method (windows specific) if first fails." [url]
