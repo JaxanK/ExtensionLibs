@@ -118,6 +118,23 @@
                    first)]
     (get numbers index)))
 
+;ChatGPT created function - I didn't really check it well but it works!
+(defn recursive-filter [filter-function coll]
+  (cond
+    (empty? coll) coll
+    (map? coll)
+    (into {} (for [[k v] coll]
+               (if (map? v)
+                 [k (recursive-filter filter-function v)]
+                 (if (filter-function v)
+                   [k v]))))
+    (sequential? coll)
+    (map #(recursive-filter filter-function %) coll)
+    :else
+    (if (filter-function coll)
+      coll
+      nil)))
+
 ;|========== Threading Functions ==========|
 (def KillAllThreads false)
 (defn runFunctionEveryMilliseconds [func ms]
